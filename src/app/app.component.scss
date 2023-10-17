@@ -1,0 +1,229 @@
+.comment{
+  width: 100%;
+  background-color: var(--White);
+  border-radius: 10px;
+  padding:15px 20px;
+}
+
+.reply {
+  padding-left: 15px;
+  border-left: 1px solid var(--color-Grayish-Blue);
+}
+
+.comment:nth-child(n+2){
+  margin-top: 15px;
+}
+
+.reply .comment:first-child{
+  margin-top: 15px;
+}
+
+.comment-title{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.comment-title *{
+  padding: 5px;
+}
+
+.comment-title__user{
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.comment-title__label{
+  background-color: var(--color-Moderate-blue);
+  color: var(--White);
+  font-size: 1rem;
+}
+
+.comment-title__time{
+  font-size: 1.4rem;
+  color: var(--color-Grayish-Blue);
+}
+
+.comment-title__img--1{
+  background: url('../assets/images/avatars/image-amyrobson.png') no-repeat center;
+}
+
+.comment-title__img--2{
+  background: url('../assets/images/avatars/image-maxblagun.png') no-repeat center;
+}
+
+.comment-title__img--3{
+  background: url('../assets/images/avatars/image-ramsesmiron.png') no-repeat center;
+}
+
+.comment-title__img--4{
+  background: url('../assets/images/avatars/image-juliusomo.png') no-repeat center;
+}
+
+.comment-title__img{
+  width: 60px;
+  height: 60px;
+  background-size: 100%;
+  border-radius: 50%;
+
+}
+
+
+
+.comment__description{
+  font-size: 1.6rem;
+  color: var(--color-Grayish-Blue);
+  line-height: 1.2;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+.replyingTo{
+  color:var(--color-Moderate-blue);
+  font-weight: 700;
+}
+
+
+.comment-pie{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.comment-pie__cuenta{
+  background-color: var( --color-Light-gray);
+  border-radius: 5px;
+  font-size: 1.6rem;
+  width: 100px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 12px 10px;
+}
+
+.comment-pie__cuenta--value{
+  color:var(--color-Moderate-blue);
+  font-weight: 700;
+}
+
+.comment-pie__cuenta--plus,
+.comment-pie__cuenta--minus{
+  color: var(--color-Grayish-Blue) ;
+  cursor: pointer;
+}
+
+.comment-pie__reply{
+  font-size: 1.8rem;
+  font-weight: 700;
+  color:var(--color-Moderate-blue);
+  position: relative;
+  cursor: pointer;
+}
+
+.comment-pie__reply::before{
+  content: url('../assets/images/icon-reply.svg');
+  position: absolute;
+  top: 0;
+  left: -20px;
+}
+
+.comment-pie__reply--delete{
+  font-size: 1.6rem;
+  font-weight: 700;
+  color:var(--color-Soft-Red);
+  position: relative;
+  cursor: pointer;
+}
+
+.comment-pie__reply--delete::before{
+  content: url('../assets/images/icon-delete.svg');
+  position: absolute;
+  top: 0;
+  left: -15px;
+}
+
+.comment-pie__reply--edit{
+  font-size: 1.6rem;
+  font-weight: 700;
+  color:var(--color-Moderate-blue);
+  position: relative;
+  cursor: pointer;
+}
+
+.comment-pie__reply--edit::before{
+  content: url('../assets/images/icon-edit.svg');
+  position: absolute;
+  top: 0;
+  left: -15px;
+}
+
+.comment-pie__you{
+  display: flex;
+  flex-direction: column-reverse;
+  align-items:end;
+  justify-content: space-between;
+  min-width: 100px;
+}
+
+.comment-add__textarea{
+  width: 100%;
+  min-height: 150px;
+  border-radius: 10px;
+  border: 1px solid var(--color-Light-gray);
+  resize: none;
+  padding: 10px 15px;
+  font-size: 1.6rem;
+}
+
+.comment-add__details{
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.comment-add__details--img{
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background: url('../assets/images/avatars/image-juliusomo.png');
+  background-size: cover;
+
+}
+
+.comment-add__details--form{
+  width: 80px;
+}
+
+.comment-add__details--form button{
+  width: 100%;
+  background-color: var(--color-Moderate-blue);
+  color: var(--White);
+  padding: 10px 20px;
+  border-radius: 10px;
+  outline: none;
+  border: none;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+}
+
+
+.comment-add__details--form button:hover{
+  cursor: pointer;
+}
+
+//Modal
+.modal{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color:var(--color-Dark-blue) ;
+  z-index: 1;
+}
+
+.body-overflow {
+  overflow: hidden;
+}
+

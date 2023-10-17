@@ -1,1 +1,35 @@
-/* You can add global styles to this file, and also import other style files */
+:root{
+  --color-Moderate-blue: hsl(238, 40%, 52%);
+  --color-Soft-Red: hsl(358, 79%, 66%);
+  --Light-grayish-blue: hsl(239, 57%, 85%);
+  --color-Pale-red: hsl(357, 100%, 86%);
+  --color-Dark-blue: hsl(212, 24%, 26%);
+  --color-Grayish-Blue: hsl(211, 10%, 45%);
+  --color-Light-gray: hsl(223, 19%, 93%);
+  --color-Very-light-gray: hsl(228, 33%, 97%);
+  --White: hsl(0, 0%, 100%);
+  font-size: 62.5%;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  font-family: 'Rubik', sans-serif;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var( --color-Light-gray);
+  position: relative;
+}
+
+.main{
+  width: 90%;
+  min-height: 20px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
