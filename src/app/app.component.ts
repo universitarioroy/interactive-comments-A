@@ -88,18 +88,17 @@ export class AppComponent implements AfterViewInit{
 
   onDelete(event:Event){
     this.modal=true;
-    this.renderer.setStyle(document.body, 'height', '100vh');
     this.renderer.setStyle(document.body, 'overflow', 'hidden');
-
-
   }
+
+  onCloseModal(){
+    this.modal=false;
+    this.renderer.setStyle(document.body, 'overflow', 'auto');
+  }
+
   ngAfterViewInit(){
     console.log('asdfghj');
     console.log(this.data.comments[0].user.username);
-
-
-
-
   }
 
 }
