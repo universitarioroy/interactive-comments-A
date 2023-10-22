@@ -2,7 +2,9 @@ export interface comment{
   id:number,
   content:string,
   createdAt:string,
+  createdAtDate?:String,
   score:number,
+  replyingTo?:string,
   user:{
     image:{
       png:string,
@@ -10,5 +12,5 @@ export interface comment{
     },
     username:string
   },
-  replies: any []
+  replies?:  comment[]
 }

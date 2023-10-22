@@ -42,3 +42,8 @@ testem.log
 Thumbs.db
 
 .vscode
+
+.firebase/
+.firebaserc
+firebase.json
+
