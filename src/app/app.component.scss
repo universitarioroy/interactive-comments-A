@@ -147,6 +147,7 @@
   cursor: pointer;
 }
 
+
 .comment-pie__reply--edit::before{
   content: url('../assets/images/icon-edit.svg');
   position: absolute;
@@ -283,6 +284,7 @@
   border: none;
   font-size: 1.4rem;
   text-transform: uppercase;
+  cursor: pointer;
 }
 
 .comment-update__details--desktop{

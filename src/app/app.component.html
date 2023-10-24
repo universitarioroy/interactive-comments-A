@@ -16,7 +16,7 @@
           <span class="comment-title__user">{{cardComment.user.username}}</span>
           <span class="comment-title__time">{{cardComment.createdAt}}</span>
         </div>
-        <p class="comment-pie__reply comment-pie__reply--desktop" (click)="reply(cardComment.id,cardComment.user.username)">Reply</p>
+        <p class="comment-pie__reply comment-pie__reply--desktop" (click)="reply(i,0,cardComment.id,cardComment.user.username,0)">Reply</p>
     </div>
     <p class="comment__description">{{cardComment.content}}</p>
   </div>
@@ -26,9 +26,27 @@
         <span class="comment-pie__cuenta--value" >{{cardComment.score}}</span>
         <span class="comment-pie__cuenta--minus" (click)="onMinusScore(i,0,0)">-</span>
     </div>
-    <p class="comment-pie__reply comment-pie__reply--hide" (click)="reply(cardComment.id,cardComment.user.username)">Reply</p>
+    <p class="comment-pie__reply comment-pie__reply--hide" (click)="reply(i,0,cardComment.id,cardComment.user.username,0)">Reply</p>
   </div>
   </section>
+  <!-- Reply Temporal -->
+  <section class="comment comment-add  comment-add-reply comment-add-reply__N2 hide"
+  [ngClass]="{
+    'show':replyState && cardComment.id===idUser && indiceTmp===i,
+  }"
+>
+  <textarea class="comment-add__textarea" name="" id="" [(ngModel)]="replyComment"  placeholder="Add  a comment..."></textarea>
+    <div class="comment-add__details--img"
+    [ngStyle]="{
+      'background':'url(' + imagenCurentUser + ') no-repeat center',
+      'background-size':'100%',
+    }"
+    ></div>
+    <form class="comment-add__details--form">
+      <button name="send" id="send" (click)="addReplyComment(i)">Reply</button>
+    </form>
+  </section>
+
   <ng-template #sameuser>
     <!-- View initial -->
     <section  class="comment comment-respose" [class.hide]="!edit.edit_0 && ((indice===0 || indice !==i)?false:true)" >
@@ -75,7 +93,10 @@
             </div>
             <div class="comment-pie__you comment-pie__you--options">
               <p class="comment-pie__reply--delete"  (click)="onDelete(i,0,0)">Delete</p>
-              <p class="comment-pie__reply--edit">Edit</p>
+              <p class="comment-pie__reply--edit" [ngStyle]=
+              "{'color':'hsl(239, 57%, 85%)',
+              'cursor':'none'}"
+              >Edit</p>
             </div>
             <form  class="comment-update__details--form comment-update__details--mobile">
               <button name="udpdate" id="udpdate" (click)="onUpdate(i)">update</button>
@@ -94,30 +115,17 @@
         </div>
         <div class="comment-pie__you comment-pie__you--hide">
           <p class="comment-pie__reply--delete"  (click)="onDelete(i,0,0)">Delete</p>
-          <p class="comment-pie__reply--edit">Edit</p>
+          <p class="comment-pie__reply--edit"
+              [ngStyle]="{'color':'hsl(239, 57%, 85%)',
+                          'cursor':'none',
+
+                          }">Edit</p>
         </div>
 
       </div>
     </section>
   </ng-template>
 
-  <!-- Reply Temporal -->
-  <section class="comment comment-add  comment-add-reply comment-add-reply__N2 hide"
-    [ngClass]="{
-      'show':cardComment.id===idUser && replyState,
-    }"
-  >
-    <textarea class="comment-add__textarea" name="" id="" [(ngModel)]="replyComment"  placeholder="Add  a comment..."></textarea>
-      <div class="comment-add__details--img"
-      [ngStyle]="{
-        'background':'url(' + imagenCurentUser + ') no-repeat center',
-        'background-size':'100%',
-      }"
-      ></div>
-      <form class="comment-add__details--form">
-        <button name="send" id="send" (click)="addReplyComment(i)">Reply</button>
-      </form>
-  </section>
   <!-- Reply comment -->
   <section class="reply" >
     <section class="cards" *ngFor="let level of cardComment.replies; index as id">
@@ -135,7 +143,7 @@
                 <span class="comment-title__user" *ngIf="level!==undefined">{{level.user.username}}</span>
                 <span class="comment-title__time" *ngIf="level!==undefined">{{level.createdAt}}</span>
             </div>
-            <p class="comment-pie__reply comment-pie__reply--desktop">Reply</p>
+            <p class="comment-pie__reply comment-pie__reply--desktop" (click)="reply(i,id,level.id,level.user.username,1)">Reply</p>
           </div>
           <p *ngIf="level!==undefined" class="comment__description"><span class="replyingTo">{{level.replyingTo}}&nbsp;</span>{{level.content}}</p>
         </div>
@@ -145,9 +153,27 @@
               <span class="comment-pie__cuenta--value" *ngIf="level!==undefined">{{level.score}}</span>
               <span class="comment-pie__cuenta--minus" (click)="onMinusScore(i,id,1)">-</span>
           </div>
-          <p class="comment-pie__reply comment-pie__reply--hide">Reply</p>
+          <p class="comment-pie__reply comment-pie__reply--hide" (click)="reply(i,id,level.id,level.user.username,1)">Reply</p>
         </div>
       </section>
+
+      <section class="comment comment-add  comment-add-reply comment-add-reply__N2 hide"
+      [ngClass]="{
+        'show':replyState && level.id===idUser && indiceTmp===i && idxTmp===id,
+      }"
+    >
+      <textarea class="comment-add__textarea" name="" id="" [(ngModel)]="replyComment"  placeholder="Add  a comment..."></textarea>
+        <div class="comment-add__details--img"
+        [ngStyle]="{
+          'background':'url(' + imagenCurentUser + ') no-repeat center',
+          'background-size':'100%',
+        }"
+        ></div>
+        <form class="comment-add__details--form">
+          <button name="send" id="send" (click)="addReplyComment(i)">Reply</button>
+        </form>
+      </section>
+
       <ng-template #sameuserLevel>
         <!-- view -->
         <section  class="comment comment-respose" [class.hide]="!edit.edit_1 && indice===i && idx===id">
@@ -194,7 +220,12 @@
                 </div>
                 <div class="comment-pie__you comment-pie__you--options">
                   <p class="comment-pie__reply--delete"  (click)="onDelete(i,0,0)">Delete</p>
-                  <p class="comment-pie__reply--edit">Edit</p>
+                  <p class="comment-pie__reply--edit"
+                  [ngStyle]="{'color':'hsl(239, 57%, 85%)',
+                          'cursor':'none',
+
+                          }"
+                  >Edit</p>
                 </div>
                 <form  class="comment-update__details--form comment-update__details--mobile">
                   <button name="udpdate" id="udpdate" (click)="onUpdate(i)">update</button>
@@ -213,7 +244,12 @@
             </div>
             <div class="comment-pie__you comment-pie__you--hide">
               <p class="comment-pie__reply--delete"  (click)="onDelete(i,0,0)">Delete</p>
-              <p class="comment-pie__reply--edit">Edit</p>
+              <p class="comment-pie__reply--edit"
+              [ngStyle]="{'color':'hsl(239, 57%, 85%)',
+                          'cursor':'none',
+
+                          }"
+              >Edit</p>
             </div>
 
           </div>
@@ -221,6 +257,9 @@
 
       </ng-template>
     </section>
+
+
+
   </section>
 </section>
 
