@@ -22,15 +22,16 @@
   </div>
   <div class="comment-pie">
     <div class="comment-pie__cuenta">
-        <span class="comment-pie__cuenta--plus">+</span>
-        <span class="comment-pie__cuenta--value">{{cardComment.score}}</span>
-        <span class="comment-pie__cuenta--minus">-</span>
+        <span class="comment-pie__cuenta--plus" (click)="onAddScore(i,0,0)">+</span>
+        <span class="comment-pie__cuenta--value" >{{cardComment.score}}</span>
+        <span class="comment-pie__cuenta--minus" (click)="onMinusScore(i,0,0)">-</span>
     </div>
     <p class="comment-pie__reply comment-pie__reply--hide" (click)="reply(cardComment.id,cardComment.user.username)">Reply</p>
   </div>
   </section>
   <ng-template #sameuser>
-    <section  class="comment comment-respose" [class.hide]="!edit" >
+    <!-- View initial -->
+    <section  class="comment comment-respose" [class.hide]="!edit.edit_0 && ((indice===0 || indice !==i)?false:true)" >
       <div class="comment-desktop__view">
         <div class="comment-desktop-view-title">
           <div class="comment-title">
@@ -42,26 +43,27 @@
               <span class="comment-title__time">{{cardComment.createdAt}}</span>
             </div>
             <div class="comment-pie__you comment-pie__you--options">
-              <p class="comment-pie__reply--delete"  (click)="onDelete(i)">Delete</p>
-              <p class="comment-pie__reply--edit" (click)="onEdit(cardComment.content)">Edit</p>
+              <p class="comment-pie__reply--delete"  (click)="onDelete(i,0,0)">Delete</p>
+              <p class="comment-pie__reply--edit" (click)="onEdit(i,0,cardComment.content,0)">Edit</p>
             </div>
         </div>
         <p class="comment__description"><span class="replyingTo">{{cardComment.replyingTo}}&nbsp;</span>{{cardComment.content}}</p>
       </div>
       <div class="comment-pie">
         <div class="comment-pie__cuenta">
-            <span class="comment-pie__cuenta--plus">+</span>
-            <span class="comment-pie__cuenta--value">{{cardComment.score}}</span>
-            <span class="comment-pie__cuenta--minus">-</span>
+            <span class="comment-pie__cuenta--plus" (click)="onAddScore(i,0,0)">+</span>
+            <span class="comment-pie__cuenta--value">{{cardComment.score}} </span>
+            <span class="comment-pie__cuenta--minus" (click)="onMinusScore(i,0,0)">-</span>
         </div>
         <div class="comment-pie__you comment-pie__you--hide">
-          <p class="comment-pie__reply--delete"  (click)="onDelete(i)">Delete</p>
-          <p class="comment-pie__reply--edit" (click)="onEdit(cardComment.content)">Edit</p>
+          <p class="comment-pie__reply--delete"  (click)="onDelete(i,0,0)">Delete</p>
+          <p class="comment-pie__reply--edit" (click)="onEdit(i,0,cardComment.content,0)">Edit</p>
         </div>
 
       </div>
     </section>
-    <section  class="comment comment-respose comment-you-edit" [class.hide]="edit">
+    <!-- View edit -->
+    <section  class="comment comment-respose comment-you-edit" [class.hide]="edit.edit_0 || indice!==i?true:false">
       <div class="comment-desktop__view">
         <div class="comment-desktop-view-title">
           <div class="comment-title">
@@ -72,7 +74,7 @@
 
             </div>
             <div class="comment-pie__you comment-pie__you--options">
-              <p class="comment-pie__reply--delete"  (click)="onDelete(i)">Delete</p>
+              <p class="comment-pie__reply--delete"  (click)="onDelete(i,0,0)">Delete</p>
               <p class="comment-pie__reply--edit">Edit</p>
             </div>
             <form  class="comment-update__details--form comment-update__details--mobile">
@@ -91,7 +93,7 @@
             <span class="comment-pie__cuenta--minus">-</span>
         </div>
         <div class="comment-pie__you comment-pie__you--hide">
-          <p class="comment-pie__reply--delete"  (click)="onDelete(i)">Delete</p>
+          <p class="comment-pie__reply--delete"  (click)="onDelete(i,0,0)">Delete</p>
           <p class="comment-pie__reply--edit">Edit</p>
         </div>
 
@@ -99,6 +101,7 @@
     </section>
   </ng-template>
 
+  <!-- Reply Temporal -->
   <section class="comment comment-add  comment-add-reply comment-add-reply__N2 hide"
     [ngClass]="{
       'show':cardComment.id===idUser && replyState,
@@ -115,41 +118,109 @@
         <button name="send" id="send" (click)="addReplyComment(i)">Reply</button>
       </form>
   </section>
-
+  <!-- Reply comment -->
   <section class="reply" >
-    <section  class="comment comment-respose" *ngFor="let level of cardComment.replies">
-      <div class="comment-desktop__view">
-        <div class="comment-desktop-view-title">
-          <div class="comment-title">
-              <div class="comment-title__img"  [ngStyle]="
-              {
-                'background':'url(' + level.user.image.png + ') no-repeat center',
-                'background-size': '100%',
-              }
-            ">
+    <section class="cards" *ngFor="let level of cardComment.replies; index as id">
+      <section  class="comment comment-respose" *ngIf="level.user.username!==curentUserName; else sameuserLevel">
+        <div class="comment-desktop__view">
+          <div class="comment-desktop-view-title">
+            <div class="comment-title">
+                <div class="comment-title__img"  [ngStyle]="
+                {
+                  'background':'url(' + level.user.image.png + ') no-repeat center',
+                  'background-size': '100%',
+                }
+              ">
+              </div>
+                <span class="comment-title__user" *ngIf="level!==undefined">{{level.user.username}}</span>
+                <span class="comment-title__time" *ngIf="level!==undefined">{{level.createdAt}}</span>
             </div>
-              <span class="comment-title__user" *ngIf="level!==undefined">{{level.user.username}}</span>
-              <span class="comment-title__time" *ngIf="level!==undefined">{{level.createdAt}}</span>
+            <p class="comment-pie__reply comment-pie__reply--desktop">Reply</p>
           </div>
-          <p class="comment-pie__reply comment-pie__reply--desktop">Reply</p>
+          <p *ngIf="level!==undefined" class="comment__description"><span class="replyingTo">{{level.replyingTo}}&nbsp;</span>{{level.content}}</p>
         </div>
-        <p *ngIf="level!==undefined" class="comment__description"><span class="replyingTo">{{level.replyingTo}}&nbsp;</span>{{level.content}}</p>
-      </div>
-      <div class="comment-pie">
-        <div class="comment-pie__cuenta">
-            <span class="comment-pie__cuenta--plus">+</span>
-            <span class="comment-pie__cuenta--value" *ngIf="level!==undefined">{{level.score}}</span>
-            <span class="comment-pie__cuenta--minus">-</span>
+        <div class="comment-pie">
+          <div class="comment-pie__cuenta">
+              <span class="comment-pie__cuenta--plus" (click)="onAddScore(i,id,1)">+</span>
+              <span class="comment-pie__cuenta--value" *ngIf="level!==undefined">{{level.score}}</span>
+              <span class="comment-pie__cuenta--minus" (click)="onMinusScore(i,id,1)">-</span>
+          </div>
+          <p class="comment-pie__reply comment-pie__reply--hide">Reply</p>
         </div>
-        <p class="comment-pie__reply comment-pie__reply--hide">Reply</p>
-      </div>
+      </section>
+      <ng-template #sameuserLevel>
+        <!-- view -->
+        <section  class="comment comment-respose" [class.hide]="!edit.edit_1 && indice===i && idx===id">
+          <div class="comment-desktop__view">
+            <div class="comment-desktop-view-title">
+              <div class="comment-title">
+                  <div class="comment-title__img"
+                  [style.background-image]="'url(' + imagenCurentUser + ')'"
+                  ></div>
+                  <span class="comment-title__user">{{level.user.username}}</span>
+                  <span class="comment-title__label">you</span>
+                  <span class="comment-title__time">{{level.createdAt}}</span>
+                </div>
+                <div class="comment-pie__you comment-pie__you--options">
+                  <p class="comment-pie__reply--delete"  (click)="onDelete(i,id,1)">Delete</p>
+                  <p class="comment-pie__reply--edit" (click)="onEdit(i,id,level.content,1)">Edit</p>
+                </div>
+            </div>
+            <p class="comment__description"><span class="replyingTo">{{level.replyingTo}}&nbsp;</span>{{level.content}}</p>
+          </div>
+          <div class="comment-pie">
+            <div class="comment-pie__cuenta">
+                <span class="comment-pie__cuenta--plus" (click)="onAddScore(i,id,1)">+</span>
+                <span class="comment-pie__cuenta--value">{{level.score}}</span>
+                <span class="comment-pie__cuenta--minus" (click)="onMinusScore(i,id,1)">-</span>
+            </div>
+            <div class="comment-pie__you comment-pie__you--hide">
+              <p class="comment-pie__reply--delete"  (click)="onDelete(i,id,1)">Delete</p>
+              <p class="comment-pie__reply--edit" (click)="onEdit(i,id,level.content,1)">Edit</p>
+            </div>
+
+          </div>
+        </section>
+        <!-- edit -->
+        <section  class="comment comment-respose comment-you-edit" [class.hide]="edit.edit_1 || !((indice===i) && (idx===id))">
+          <div class="comment-desktop__view">
+            <div class="comment-desktop-view-title">
+              <div class="comment-title">
+                  <div class="comment-title__img"  [style.background-image]="'url(' + imagenCurentUser + ')'"></div>
+                  <span class="comment-title__user">{{level.user.username}}</span>
+                  <span class="comment-title__label">you</span>
+                  <span class="comment-title__time">{{level.createdAt}}</span>
+
+                </div>
+                <div class="comment-pie__you comment-pie__you--options">
+                  <p class="comment-pie__reply--delete"  (click)="onDelete(i,0,0)">Delete</p>
+                  <p class="comment-pie__reply--edit">Edit</p>
+                </div>
+                <form  class="comment-update__details--form comment-update__details--mobile">
+                  <button name="udpdate" id="udpdate" (click)="onUpdate(i)">update</button>
+                </form>
+            </div>
+            <textarea class="comment-add__textarea comment-add__textarea--edit" name="" id="" [(ngModel)]="cardCommentContent"></textarea>
+            <form  class="comment-update__details--form comment-update__details--desktop">
+              <button name="udpdate" id="udpdate" (click)="onUpdate(i)">update</button>
+            </form>
+          </div>
+          <div class="comment-pie">
+            <div class="comment-pie__cuenta">
+                <span class="comment-pie__cuenta--plus">+</span>
+                <span class="comment-pie__cuenta--value">{{level.score}}</span>
+                <span class="comment-pie__cuenta--minus">-</span>
+            </div>
+            <div class="comment-pie__you comment-pie__you--hide">
+              <p class="comment-pie__reply--delete"  (click)="onDelete(i,0,0)">Delete</p>
+              <p class="comment-pie__reply--edit">Edit</p>
+            </div>
+
+          </div>
+        </section>
+
+      </ng-template>
     </section>
-
-
-
-
-
-
   </section>
 </section>
 

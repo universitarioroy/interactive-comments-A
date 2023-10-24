@@ -102,11 +102,20 @@ export class AppComponent implements AfterViewInit,OnInit{
 
   replyComment='';
 
-  //indice para eliminar modal
+  //indice para eliminar commet
   indice:number=0;
+  idx:number=0;
+  level:number=0;
+
 
   //variable Edit
-  edit:boolean=true;
+  //edit:boolean=true;
+  edit:any={
+    'edit_0':true,
+    'edit_1':true,
+
+  };
+
   cardCommentContent:string='';
 
   constructor(
@@ -117,22 +126,55 @@ export class AppComponent implements AfterViewInit,OnInit{
   modal:boolean=false;
 
   onUpdate(index:number){
-    this.data.comments[index].content=this.cardCommentContent;
-    this.data.comments[index].createdAtDate=new Date().toISOString();
+    if(this.level===0){
+      this.data.comments[this.indice].content=this.cardCommentContent;
+      this.data.comments[this.indice].createdAtDate=new Date().toISOString();
+    }else if (this.level===1){
+      this.data.comments[this.indice].replies![this.idx].content=this.cardCommentContent;
+      this.data.comments[this.indice].replies![this.idx].createdAtDate=new Date().toISOString();
+    }
     localStorage.setItem("ListaComment",JSON.stringify(this.data.comments));
     this.refreshTemplateTimes(this.data.comments);
-    this.edit=true;
-    console.log('h');
+    //this.edit=true;
+    this.edit['edit_0']=true;
+    this.edit['edit_1']=true;
+    // console.log(this.edit['edit_1']);
+    // console.log(this.indice);
+    // console.log( this.idx);
+    this.indice=0;
+    this.idx=0;
+
   }
 
-  onDelete(index:number){
+
+
+  onEdit(index:number,idx:number,content:string,level:number){
+    this.indice=index;
+    this.idx=idx;
+    this.cardCommentContent=content;
+    this.level=level;
+    if(this.level===0){
+      this.edit.edit_0=false;
+    }else if(this.level===1){
+      this.edit.edit_1=false;
+    }
+  }
+
+  onDelete(index:number,idx:number,level:number){
     this.modal=true;
     this.renderer.setStyle(document.body, 'overflow', 'hidden');
     this.indice=index;
+    this.idx=idx;
+    this.level=level;
   }
 
   onDeleteComment(){
-    this.data.comments.splice(this.indice,1);
+    if(this.level===0){
+      this.data.comments.splice(this.indice,1);
+
+    }else if(this.level===1){
+      this.data.comments[this.indice].replies!.splice(this.idx,1);
+    }
     localStorage.setItem("ListaComment",JSON.stringify(this.data.comments));
     this.onCloseModal();
     this.refreshTemplateTimes(this.data.comments);
@@ -142,8 +184,6 @@ export class AppComponent implements AfterViewInit,OnInit{
     this.modal=false;
     this.renderer.setStyle(document.body, 'overflow', 'auto');
   }
-
-
 
   addComment(){
     const addcoment:comment = {
@@ -168,13 +208,6 @@ export class AppComponent implements AfterViewInit,OnInit{
     this.contentAddComment='';
     //console.log(this.calculateDiffTime(new Date().toISOString(),new Date().toISOString()));
   }
-
-  onEdit(content:string){
-    console.log('fgh');
-    this.edit=false;
-    this.cardCommentContent=content;
-  }
-
 
   reply(id:number,username:string){
     this.replyComment=`@${username}, `;
@@ -219,6 +252,31 @@ export class AppComponent implements AfterViewInit,OnInit{
     this.replyComment='';
     this.replyState=false;
   }
+
+  onAddScore(index:number,idx:number,level:number){
+    if(level===0){
+        this.data.comments[index].score++;
+    }else if(level===1){
+        this.data.comments[index].replies![idx].score++;
+    }
+    localStorage.setItem("ListaComment",JSON.stringify(this.data.comments));
+    this.refreshTemplateTimes(this.data.comments);
+  }
+
+  onMinusScore(index:number,idx:number,level:number){
+    if(level===0){
+      if(this.data.comments[index].score>0){
+        this.data.comments[index].score--;
+      }
+    }else if(level===1){
+      if(this.data.comments[index].replies![idx].score>0){
+        this.data.comments[index].replies![idx].score--;
+      }
+    }
+    localStorage.setItem("ListaComment",JSON.stringify(this.data.comments));
+    this.refreshTemplateTimes(this.data.comments);
+  }
+
 
   showTime(listComment:comment[]){
     for(let i=0;i<listComment.length;i++){
